@@ -1,15 +1,11 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
   return (
-    <Tabs>
-      <Tabs.Screen
-        name="tab1"
-      />
-      <Tabs.Screen
-        name="tab2"
-      />
+    <Tabs screenOptions={{ headerShown: false }}>
+      <Tabs.Screen name="tab1" options={{ tabBarIcon: () => null }} />
+      <Tabs.Screen name="tab2" options={{ tabBarIcon: () => null }} />
     </Tabs>
   );
 }
