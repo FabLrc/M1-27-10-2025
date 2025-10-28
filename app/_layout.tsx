@@ -22,6 +22,13 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          headerTitle: "Détails du personnage",
+          headerBackVisible: true,
+        }}
+      />
     </Stack>
   );
 }

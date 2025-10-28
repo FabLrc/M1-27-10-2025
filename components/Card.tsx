@@ -1,9 +1,20 @@
 import Personnage from "@/model/Personnage";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Card({ personnage }: { personnage: Personnage }) {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push(`/${personnage.id}` as any);
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      activeOpacity={0.7}
+    >
       <View>
         <Text style={styles.title}>
           {personnage.nom} {personnage.prenom}
@@ -17,7 +28,7 @@ export default function Card({ personnage }: { personnage: Personnage }) {
         }
         style={styles.image}
       />
-    </View>
+    </TouchableOpacity>
   );
 }
 
