@@ -33,6 +33,27 @@ export default function page1() {
     fetchPersonnages();
   }, []);
 
+  const handleDeletePersonnage = async (id: number) => {
+    try {
+      const response = await fetch(`https://dummyjson.com/users/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+      console.log("Réponse API (DELETE):", data);
+
+      if (response.ok) {
+        setPersonnages(
+          personnages.filter((personnage) => personnage.id !== id)
+        );
+      } else {
+        console.error("Erreur lors de la suppression");
+      }
+    } catch (error) {
+      console.error("Erreur de connexion:", error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -51,9 +72,11 @@ export default function page1() {
         ) : (
           <View style={styles.cardContainer}>
             {personnages.map((personnage, index) => (
-              <View key={index} style={styles.cardWrapper}>
-                <Card personnage={personnage} />
-              </View>
+              <Card
+                key={index}
+                personnage={personnage}
+                onDelete={handleDeletePersonnage}
+              />
             ))}
           </View>
         )}

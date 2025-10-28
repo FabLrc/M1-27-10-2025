@@ -54,6 +54,7 @@ export default function AddUserModal({
       });
 
       const data = await res.json();
+      console.log("Réponse API:", data);
 
       if (res.ok) {
         setResponse({
