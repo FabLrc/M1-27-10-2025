@@ -1,20 +1,23 @@
-import personnagesData from "@/assets/personnages.json";
 import Personnage from "@/model/Personnage";
 
-interface PersonnageData {
-  nom: string;
-  prenom: string;
+interface UserAPI {
+  firstName: string;
+  lastName: string;
   image: string;
+}
+
+interface ApiResponse {
+  users: UserAPI[];
 }
 
 class PersonnageService {
   static async loadPersonnages(): Promise<Personnage[]> {
     try {
-      const data: PersonnageData[] = personnagesData;
+      const response = await fetch("https://dummyjson.com/users");
+      const data: ApiResponse = await response.json();
 
-      const personnagesList: Personnage[] = data.map((p: PersonnageData) => {
-        const imageUri = `@/assets/images/${p.image}`;
-        return new Personnage(p.nom, p.prenom, imageUri);
+      const personnagesList: Personnage[] = data.users.map((user: UserAPI) => {
+        return new Personnage(user.lastName, user.firstName, user.image);
       });
 
       return personnagesList;

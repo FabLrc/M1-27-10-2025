@@ -3,7 +3,7 @@ import DisplayText from "@/components/DisplayDate";
 import Personnage from "@/model/Personnage";
 import PersonnageService from "@/services/PersonnageService";
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function page1() {
   const [personnages, setPersonnages] = useState<Personnage[]>([]);
@@ -25,18 +25,58 @@ export default function page1() {
   }, []);
 
   return (
-    <ScrollView>
-      <View>
-        <Text> BONJOUR </Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>BONJOUR</Text>
         <DisplayText />
         {loading ? (
-          <Text>Chargement...</Text>
+          <Text style={styles.loading}>Chargement...</Text>
         ) : (
-          personnages.map((personnage, index) => (
-            <Card key={index} personnage={personnage} />
-          ))
+          <View style={styles.cardContainer}>
+            {personnages.map((personnage, index) => (
+              <View key={index} style={styles.cardWrapper}>
+                <Card personnage={personnage} />
+              </View>
+            ))}
+          </View>
         )}
       </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingVertical: 24,
+    backgroundColor: "#f5f6fa",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#2d3436",
+    marginBottom: 16,
+    letterSpacing: 2,
+  },
+  loading: {
+    fontSize: 18,
+    color: "#636e72",
+    marginTop: 24,
+  },
+  cardContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 16,
+  },
+  cardWrapper: {
+    width: "32%",
+    marginBottom: 20,
+    alignItems: "center",
+  },
+});
