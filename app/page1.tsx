@@ -17,6 +17,7 @@ export default function page1() {
   const [personnages, setPersonnages] = useState<Personnage[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterActive, setFilterActive] = useState(false);
 
   useEffect(() => {
     const fetchPersonnages = async () => {
@@ -54,17 +55,55 @@ export default function page1() {
     }
   };
 
+  const toggleFilterAgeOver30 = async () => {
+    const newState = !filterActive;
+    setFilterActive(newState);
+    setLoading(true);
+    try {
+      // Simpler & more reliable: always fetch the full list then filter client-side
+      const all = await PersonnageService.loadPersonnages();
+      if (newState) {
+        const filtered = all.filter((p) => p.age > 30);
+        console.log("Filter ON: found", filtered.length, "users > 30");
+        setPersonnages(filtered);
+      } else {
+        console.log("Filter OFF: loading all users", all.length);
+        setPersonnages(all);
+      }
+    } catch (error) {
+      console.error("Erreur lors du filtrage:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.title}>BONJOUR</Text>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setModalVisible(true)}
-          >
-            <MaterialIcons name="add" size={24} color="#fff" />
-          </TouchableOpacity>
+          <View style={styles.actionsRow}>
+            <TouchableOpacity
+              style={[
+                styles.filterButton,
+                filterActive ? styles.filterButtonActive : undefined,
+              ]}
+              onPress={toggleFilterAgeOver30}
+            >
+              <MaterialIcons
+                name="filter-list"
+                size={20}
+                color={filterActive ? "#fff" : "#2d3436"}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => setModalVisible(true)}
+            >
+              <MaterialIcons name="add" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
         <DisplayText />
         {loading ? (
@@ -124,6 +163,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+  },
+  actionsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  filterButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: "#dfe6e9",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  filterButtonActive: {
+    backgroundColor: "#00b894",
   },
   loading: {
     fontSize: 18,
