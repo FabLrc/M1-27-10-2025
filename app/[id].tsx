@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 2,
-    borderBottomColor: "#00b894",
+    borderBottomColor: "#0d6d2dff",
   },
   detailRow: {
     flexDirection: "row",
